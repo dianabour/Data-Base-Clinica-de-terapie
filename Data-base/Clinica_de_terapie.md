@@ -1,9 +1,9 @@
-DATABASE_PROJECT
-Application under test: Clinica de terapie
+ # DATABASE_PROJECT
+**Application under test:** Clinica de terapie
 
-Tools used: MySQL Workbench
+**Tools used:** MySQL Workbench
 
-Database description:Clinica de terapie ,,Kids Therapy’’ are ca scop recuperarea copiilor cu TSA (Tulburare de spectru autist) si alte intarzieri in dezvoltare.
+**Database description:** Clinica de terapie ,,Kids Therapy’’ are ca scop recuperarea copiilor cu TSA (Tulburare de spectru autist) si alte intarzieri in dezvoltare.
 Aceasta este formata dintr-o echipa de 3 terapeuti, si un coordonator de programe. Fiecare terapeut are minim un copil in programul de terapie, si maxim 4 copii. O sedinta de terapie dureaza 2 ore (120 min). 
 Copiii din cadrul clinicii de terapie au varste cuprinse intre 2 si 8 ani.
 Exista mai multe tipuri de terapie in cadrul clinicii (ABA, Logopedie, Ludoterapie, Meloterapie).
@@ -12,36 +12,35 @@ Activitatea se desfasoara zilnic, de luni pana vineri, iar parintii pot opta pen
 Participarea copiilor in cadrul sedintelor de terapie va fi inregistrata in fisa de prezenta disponibila.
 
 
-1. Database schema:
+## Database schema:
 You can find below the database schema that was generated through Reverse Engineer and which contains all the tables and the relationships between them.
 The tables are connected in the following way:
 
-You can find below the database schema that was generated through Reverse Engineer and which contains all the tables and the relationships between them.
-The tables are connected in the following way:
-
-**PROGRAM** is connected with **PACIENTI** through a **ONE TO MANY** relationship which was implemented through 
+- **PROGRAM** is connected with **PACIENTI** through a **ONE TO MANY** relationship which was implemented through 
 **PROGRAM.ID_PROGRAM** as a primary key and **PROGRAM.CNP_PACIENT** as a foreign key.
-**PROGRAM** is connected with **TERAPEUTI** through a **ONE TO MANY** relationship which was implemented through 
+- **PROGRAM** is connected with **TERAPEUTI** through a **ONE TO MANY** relationship which was implemented through 
 **PROGRAM.ID_PROGRAM** as a primary key and **PROGRAM.CNP_TERAPEUTI** as a foreign key.
-**PROGRAM** is connected with **ZILE** through a **ONE TO MANY** relationship which was implemented through 
+- **PROGRAM** is connected with **ZILE** through a **ONE TO MANY** relationship which was implemented through 
 **PROGRAM.ID_PROGRAM** as a primary key and **PROGRAM.ID_ZI** as a foreign key
-**PLAN_DE_INTERVENTIE** is connected with **PACIENTI** through a **ONE TO MANY** relationship which was implemented through 
+- **PLAN_DE_INTERVENTIE** is connected with **PACIENTI** through a **ONE TO MANY** relationship which was implemented through 
 **PLAN_DE_INTERVENTIE.CNP_TERAPEUT** as a primary key and **PLAN_DE_INTERVENTIE.CNP_PACIENT** as a foreign key.
-**PLAN_DE_INTERVENTIE** is connected with **ARII_DEZVOLTARE** through a **ONE TO MANY** relationship which was implemented through 
+- **PLAN_DE_INTERVENTIE** is connected with **ARII_DEZVOLTARE** through a **ONE TO MANY** relationship which was implemented through 
 **PLAN_DE_INTERVENTIE.CNP_TERAPEUT** as a primary key and **PLAN_DE_INTERVENTIE.ID_ARIE** as a foreign key.
-**PLAN_DE_INTERVENTIE** is connected with **TERAPII_INTEGRATE** through a **ONE TO MANY** relationship which was implemented through 
+- **PLAN_DE_INTERVENTIE** is connected with **TERAPII_INTEGRATE** through a **ONE TO MANY** relationship which was implemented through 
 **PLAN_DE_INTERVENTIE.CNP_TERAPEUT** as a primary key and **PLAN_DE_INTERVENTIE.ID_ARIE** as a foreign key.
-**PREZENTA** is connected with **ZILE** through a **ONE TO ONE** relationship which was implemented through 
+- **PREZENTA** is connected with **ZILE** through a **ONE TO ONE** relationship which was implemented through 
 **PREZENTA.ID_PREZENTA** as a primary key and **PREZENTA.ID_ZI** as a foreign key.
 
-2. Database Queries
+## Database Queries
 
-DDL (Data Definition Language)
+### DDL (Data Definition Language)
 The following instructions were written in the scope of CREATING the structure of the database (CREATE INSTRUCTIONS).
 CREATE DATABASE CLINICA_TERAPIE;
 
+```
 USE CLINICA_TERAPIE;
-
+```
+```
 CREATE TABLE TERAPEUTI (
 	CNP INT PRIMARY KEY,
 	NUME CHAR(10),
@@ -52,6 +51,8 @@ CREATE TABLE TERAPEUTI (
 	DATA_INCHEIERE DATE,
 	COORDONATOR CHAR(10)
 );
+```
+```
 CREATE TABLE PACIENTI (
 	CNP INT PRIMARY KEY,
 	NUME VARCHAR(20),
@@ -60,6 +61,8 @@ CREATE TABLE PACIENTI (
 	VARSTA INT,
 	NIVEL_EDUCATIONAL VARCHAR(25)
 );
+```
+```
 CREATE TABLE TERAPII_INTEGRATE (
 ID_TERAPIE INT NOT NULL AUTO_INCREMENT,
 DENUMIRE VARCHAR(20),
@@ -70,11 +73,15 @@ ID_ARIE INT NOT NULL AUTO_INCREMENT,
 ARIE VARCHAR(20),
 PRIMARY KEY (ID_ARIE)
 );
+```
+```
 CREATE TABLE ZILE (
 ID_ZI INT NOT NULL AUTO_INCREMENT,
 ZI CHAR(10),
 PRIMARY KEY (ID_ZI)
 );
+```
+```
 CREATE TABLE PROGRAM (
 ID_PROGRAM INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 CNP_TERAPEUT INT,
@@ -83,11 +90,15 @@ ORA_INCEPERE INT,
 ORA_INCHEIERE INT,
 ID_ZI INT REFERENCES ZILE (ID_ZI)
 );
+```
+```
 CREATE TABLE PREZENTA (
 ID_ZI INT REFERENCES ZILE (ID_ZI),
 DATAA DATE,
 PREZENTA CHAR(10)
 );
+```
+```
 CREATE TABLE PLAN_DE_INTERVENTIE (
 CNP_TERAPEUT INT,
 CNP_PACIENT INT,
@@ -95,28 +106,38 @@ ID_ARIE INT REFERENCES ARII_DEZVOLTARE (ID_ARIE),
 ID_TERAPIE INT REFERENCES TERAPII_INTEGRATE (ID_TERAPIE),
 ACTIVITATI VARCHAR(50)
 );
+```
 
-After the database and the tables have been created, a few ALTER instructions were written in order to update the structure of the database, as described below:
+**After the database and the tables have been created, a few ALTER instructions were written in order to update the structure of the database, as described below:**
+```
 ALTER TABLE PLAN_DE_INTERVENTIE ADD CONSTRAINT FK_ID_ARIE FOREIGN KEY (ID_ARIE) REFERENCES ARII_DEZVOLTARE(ID_ARIE);
-
+```
+```
 ALTER TABLE PLAN_DE_INTERVENTIE ADD CONSTRAINT FK_ID_TERAPIE FOREIGN KEY (ID_TERAPIE) REFERENCES TERAPII_INTEGRATE(ID_TERAPIE);
-
+```
+```
 ALTER TABLE PLAN_DE_INTERVENTIE ADD CONSTRAINT FK_CNP_PACIENT FOREIGN KEY (CNP_PACIENT) REFERENCES PACIENTI(CNP);
-
+```
+```
 ALTER TABLE PROGRAM ADD CONSTRAINT FK_ID_ZI FOREIGN KEY (ID_ZI) REFERENCES ZILE(ID_ZI);
-
+```
+```
 ALTER TABLE ARII_DEZVOLTARE CHANGE ARIE ARIA VARCHAR(20);
-
+```
+```
 ALTER TABLE PREZENTA ADD CONSTRAINT FK_zi_prezenta FOREIGN KEY (ID_ZI) REFERENCES ZILE(ID_ZI);
-
+```
+```
 ALTER TABLE PROGRAM ADD CONSTRAINT FK_CNP_TERAPEUT FOREIGN KEY (CNP_TERAPEUT) REFERENCES TERAPEUTI(CNP);
-
+```
+```
 ALTER TABLE PROGRAM ADD CONSTRAINT FK_CNP_COPIL FOREIGN KEY (CNP_COPIL) REFERENCES PACIENTI(CNP);
+```
+### DML (Data Manipulation Language)
+**In order to be able to use the database I populated the tables with various data necessary in order to perform queries and manipulate the data. In the testing process, this necessary data is identified in the Test Design phase and created in the Test Implementation phase.**
 
-DML (Data Manipulation Language)
-In order to be able to use the database I populated the tables with various data necessary in order to perform queries and manipulate the data. In the testing process, this necessary data is identified in the Test Design phase and created in the Test Implementation phase.
-
-Below you can find all the insert instructions that were created in the scope of this project:
+**Below you can find all the insert instructions that were created in the scope of this project:**
+```
 INSERT INTO TERAPEUTI (CNP, NUME, PRENUME, STUDII, VARSTA, DATA_INCEPERE, DATA_INCHEIERE, COORDONATOR)
 VALUES (21212, 'BOUR', 'DIANA', 'Superioare -FPSE', 26, '2024-07-01', NULL, 'FALSE'),
 	   (23232, 'POSTELNICU', 'ANA-MARIA', 'SUPERIOARE-FPSE', 25, '2022-12-15', NULL, 'FALSE'),
@@ -125,7 +146,8 @@ VALUES (21212, 'BOUR', 'DIANA', 'Superioare -FPSE', 26, '2024-07-01', NULL, 'FAL
        (26262, 'POPESCU', 'ION', 'SUPERIOARE-FPSE', 29, '2022-08-03', '2022-12-10', 'FALSE'),
        (27272, 'IONESCU', 'ALEXANDRU', 'SUPERIOARE-FPSE', 27, '2022-10-15', '2023-02-01', 'FALSE'),
        (28282, 'STANCIU', 'MIHAELA', 'SUPERIOARE-FPSE', 26, '2023-11-15', '2024-05-20', 'FALSE');
-
+```
+```
 INSERT INTO PACIENTI (CNP, NUME, PRENUME, DIAGNOSTIC, VARSTA, NIVEL_EDUCATIONAL)
 VALUES (31313, 'ANDREI', 'PAUL', 'TSA', 4, 'GRADINITA-GRUPA MICA'),
 	   (32323, 'MORARU', 'LUCA', 'TSA', 4, 'GRADINITA-GRUPA MICA'),
@@ -140,27 +162,31 @@ VALUES (31313, 'ANDREI', 'PAUL', 'TSA', 4, 'GRADINITA-GRUPA MICA'),
        (53535, 'ION', 'LUCA', 'TSA', 8, 'SCOALA PRIMARA-CLASA 1'),
        (54545, 'BOSTAN', 'TEODOR', 'TSA', 4, 'GRADINITA-GRUPA MARE'),
        (11111, 'liber', 'liber', '-', 0, 'liber');
-
+```
+```
 INSERT INTO TERAPII_INTEGRATE (ID_TERAPIE, DENUMIRE)
 VALUES (1, 'ABA'),
        (2, 'LOGOPEDIE'),
        (3, 'LUDOTERAPIE'),
 	   (4, 'MELOTERAPIE');
-
+```
+```
 INSERT INTO ARII_DEZVOLTARE (ID_ARIE, ARIA)
 VALUES (1, 'MOTRICITATE'),
        (2, 'LIMBAJ'),
        (3, 'SOCIALIZARE'),
        (4, 'COGNITIV'),
        (5, 'AUTOSERVIRE');
-
+```
+```
 INSERT INTO ZILE (ID_ZI, ZI)
 VALUES (1, 'LUNI'),
 	   (2, 'MARTI'),
        (3, 'MIERCURI'),
        (4, 'JOI'),
        (5, 'VINERI');
-
+```
+```
 INSERT INTO PROGRAM (ID_PROGRAM, CNP_TERAPEUT, CNP_COPIL, ORA_INCEPERE, ORA_INCHEIERE, ID_ZI)
 VALUES (1, 21212, 54545, 8, 10, 1),
 		(2, 23232, 41414, 8, 10, 1),
@@ -226,7 +252,8 @@ VALUES (1, 21212, 54545, 8, 10, 1),
         (62, 25252, 53535, 10, 12, 2),
         (63, 25252, 51515, 10, 12, 2),
         (64, 25252, 43434, 10, 12, 2);
-
+```
+```
 INSERT INTO PREZENTA (ID_ZI, DATAA, PREZENTA)
 VALUES (1, '2024-05-06', 'TRUE'),
 		(1, '2024-05-13', 'TRUE'),
@@ -251,7 +278,8 @@ VALUES (1, '2024-05-06', 'TRUE'),
 		(5, '2024-05-17', 'TRUE'),
 		(5, '2024-05-24', 'TRUE'),
 		(5, '2024-05-31', 'TRUE');
-
+```
+```
 INSERT INTO PLAN_DE_INTERVENTIE (CNP_TERAPEUT, CNP_PACIENT, ID_ARIE, ACTIVITATI)
 VALUES (25252, 31313, 1, 'INSIRAT OBIECTE PE SNUR'),
 		(25252, 31313, 2, 'IMITATIE VERBALA'),
@@ -313,62 +341,77 @@ VALUES (25252, 31313, 1, 'INSIRAT OBIECTE PE SNUR'),
 		(25252,	54545, 3, 'IMPARTE JUCARIILE CU COPII'),
 		(25252,	54545, 4, 'INTREBARI DE CULTURA GENERALA'),
 		(25252,	54545, 5, 'INCHIDE FERMOARUL INDEPENDENT');
+```
 
-DQL (Data Query Language)
-In order to simulate various scenarios that might happen in real life I created the following queries that would cover multiple potential real-life situations:
+#### DQL (Data Query Language)
+**In order to simulate various scenarios that might happen in real life I created the following queries that would cover multiple potential real-life situations:**
+```
 ## Afisarea tuturor datelor personale disponibile pentru toti pacientii
 SELECT * FROM PACIENTI;
-
+```
+```
 ## Afisarea CNP-ului, numelui si prenumelui tuturor pacientilor clinicii 
 SELECT CNP, NUME, PRENUME FROM PACIENTI;
-
+```
+```
 ## Afisarea CNP-ului, numelui si prenumelui tuturor pacientilor in varsta de 4 ani 
 SELECT CNP, NUME, VARSTA FROM PACIENTI WHERE VARSTA = 4;
-
+```
+```
 ## Afisarea CNP-ului, numelui si prenumelui tuturor pacientilor in varsta de PESTE 4 ani 
 SELECT CNP, NUME, VARSTA FROM PACIENTI WHERE VARSTA >= 4;
-
+```
+```
 ## Afisarea CNP-ului, numelui si prenumelui tuturor pacientilor in varsta de SUB 4 ani
 SELECT CNP, NUME, VARSTA FROM PACIENTI WHERE VARSTA <= 4;
-
+```
+```
 ## Afisarea CNP-ului, numelui si prenumelui tuturor pacientilor cu varsta mai mare decat media varstei pacientilor din clinica
 SELECT CNP, NUME, VARSTA FROM PACIENTI 
 where varsta >= (select avg(varsta) from pacienti); 
-
+```
+```
 ## Care este cel mai in varsta pacient? 
 SELECT CNP, NUME, PRENUME, VARSTA
 FROM PACIENTI
 WHERE VARSTA = (SELECT MAX(VARSTA) FROM Pacienti);                  
-
+```
+```
 ## Afisare tabela CNP din Pacienti unde CNP-ul cuprinde caracterele '21' (dar nu se cunosc toate caracterele) sau numele este Dumitru
 SELECT * FROM PACIENTI 
 WHERE CNP LIKE '31%'  
 or NUME = 'Dumitru';
-
+```
+```
 ## Afisarea detaliilor pentru pacientii cu numele Marita si prenumele Matteo sau numele Andrei si prenumele Paul
 SELECT NUME, PRENUME FROM PACIENTI 
 WHERE (NUME = 'MARITA' AND PRENUME = 'MATTEO')
    OR (NUME = 'ANDREI' AND PRENUME = 'PAUL');
-
+```
+```
 ## Cati pacienti sunt in clinica la data curenta?
 SELECT sysdate(), COUNT(*) FROM PACIENTI;
-
+```
+```
 ## Care sunt pacientii (nume, prenume si varsta) terapeutului Diana Bour?
 SELECT distinct p.nume, p.prenume, p.varsta FROM PACIENTI P
 JOIN PROGRAM PR  ON PR.CNP_COPIL    = P.CNP
 JOIN TERAPEUTI T ON PR.CNP_TERAPEUT = T.CNP
 WHERE T.NUME = 'Bour'
 and T.PRENUME = 'Diana'; 
-
+```
+```
 ## Care sunt terapeutii cu numar de pacienti de peste 5 pacienti?
 SELECT t.nume, t.prenume, count(*) FROM PACIENTI P
 JOIN PROGRAM PR  ON PR.CNP_COPIL    = P.CNP
 JOIN TERAPEUTI T ON PR.CNP_TERAPEUT = T.CNP
 group by t.nume, t.prenume
 having count(*) > 5;
-
+```
+```
 ## Care sunt activitatile specifice ariei de dezvoltare de motricitate? 
 select pdi.activitati
 FROM plan_de_interventie pdi
 JOIN arii_dezvoltare ad ON ad.id_arie = pdi.id_arie
 WHERE ad.aria = 'motricitate';
+```
